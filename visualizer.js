@@ -221,7 +221,7 @@ function onMouseMove(event) {
       const sphereIndex = spheres.indexOf(hit);
       if (sphereIndex !== -1 && sphereData[sphereIndex]) {
         const amount = sphereData[sphereIndex].amount;
-        tooltipDiv.textContent = `${amount.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: amount > 1 ? 0 : 8})} S`;
+        tooltipDiv.textContent = `${amount.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: amount > 1 ? 0 : 8})} SPN`;
         tooltipDiv.style.display = 'block';
         tooltipDiv.style.left = `${event.clientX + 15}px`;
         tooltipDiv.style.top = `${event.clientY + 15}px`;
@@ -897,7 +897,7 @@ function createSphere(amount, txHash) {
   // Calculate segments - scale between min and max segments
   const segmentSize = Math.round(MIN_SPHERE_SEGMENTS + (normalizedAmount * (MAX_SPHERE_SEGMENTS - MIN_SPHERE_SEGMENTS)));
   if (amount > 1) {
-    console.info(`${amount} S at ${txHash}`);
+    console.info(`${amount} SPN at ${txHash}`);
   }
 
   // Set colors based on amount thresholds
