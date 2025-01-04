@@ -27,12 +27,12 @@ h1,h2,h3,h4,h5,h6,p,a{
 h1{font-weight: 900 !important;}
 h2{font-weight: 300 !important; font-size: 1.3em !important;}
 
-a { color: #FF4433; text-decoration: none;}
-a, a:hover, a:visited, a:active{color: #FE9A4C}
+a { color: #00b7ff; text-decoration: none;}
+a, a:hover, a:visited, a:active{color: #ffffff}
 a:hover{text-decoration:underline;}
 #close-button { 
   padding: 10px 20px;
-  border: 1px solid #FE9A4C;
+  border: 1px solid #ffffff;
   line-height: 60px;
   border-radius: 16px;
 }
@@ -84,6 +84,20 @@ a:hover{text-decoration:underline;}
   height: 32px;
 }
 
+#mallard-svg {
+  width: 128px;
+  height: 128px;
+}
+
+.mallard-svg {
+  transition: filter 0.3s ease; /* Smooth transition for the effect */
+}
+
+.mallard-svg:hover {
+  filter: brightness(0.8); /* Darkens the logo on hover */
+}
+
+
 /* Info Box */
 #info {
   position: absolute;
@@ -117,7 +131,7 @@ a:hover{text-decoration:underline;}
 }
 
 #content-background {
-  background-color: #214E81;
+  background-color: #313131;
   padding: 15px 20px;
   border-radius: 16px;
 }
@@ -203,3 +217,8 @@ and (max-width : 640px){
 }
 
 /* End Info Box */
+
+.mallard-svg {
+  width: 64px;
+  height: 64px;
+}

@@ -4,7 +4,7 @@ let spheres = [];
 let sphereBodies = [];
 let sphereQueue = [];
 let sphereData = [];
-let sonic_sent = 0;
+let SPN_sent = 0;
 let selectedSphereGlobal = null;
 let ground;
 let room;
@@ -24,10 +24,10 @@ const isVisibilitySupported = typeof document.hidden !== "undefined";
 window.sphereQueue = sphereQueue;
 
 // TX settings
-const RPC_URL = "https://rpc.soniclabs.com";
-const BLOCK_EXPLORER = "https://sonicscan.org/tx";
-const MIN_AMOUNT = 0.1; // Min Sonic
-const MAX_AMOUNT = 100000; // Max Sonic
+const RPC_URL = "https://testnet-rpc.superposition.so";
+const BLOCK_EXPLORER = "https://testnet-explorer.superposition.so/tx";
+const MIN_AMOUNT = 0.1; // Min SPN
+const MAX_AMOUNT = 100000; // Max SPN
 const TPS_WINDOW = 30000; // 30 seconds
 
 // Sphere settings
@@ -181,7 +181,7 @@ function onSphereClick(event, canvas) {
         hit.material.emissiveIntensity = GLOW_INTENSITY;
         
         if (window.updateStatsDisplay) {
-          window.updateStatsDisplay(sonic_sent, spheres.length, calculateTPS(), selectedSphere);
+          window.updateStatsDisplay(SPN_sent, spheres.length, calculateTPS(), selectedSphere);
         }
       }
     }
@@ -205,14 +205,14 @@ function onMouseMove(event) {
       if (!window.isStatsHovered) {
         window.isStatsHovered = true;
         if (window.updateStatsDisplay) {
-          window.updateStatsDisplay(sonic_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
+          window.updateStatsDisplay(SPN_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
         }
       }
     } else if (spheres.includes(hit)) {
       if (window.isStatsHovered) {
         window.isStatsHovered = false;
         if (window.updateStatsDisplay) {
-          window.updateStatsDisplay(sonic_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
+          window.updateStatsDisplay(SPN_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
         }
       }
       canvas.style.cursor = 'pointer';
@@ -231,7 +231,7 @@ function onMouseMove(event) {
     if (window.isStatsHovered) {
       window.isStatsHovered = false;
       if (window.updateStatsDisplay) {
-        window.updateStatsDisplay(sonic_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
+        window.updateStatsDisplay(SPN_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
       }
     }
     canvas.style.cursor = 'default';
@@ -277,16 +277,16 @@ function createRoomEnvironment() {
   const ctx = canvas.getContext('2d');
 
   // Define colors
-  const darkBlue = '#000';
-  const brownish = '#492927';
-  const peach = '#a97552';
+  const Bottom = '#D9D9D9';
+  const Middle = '#D9D9D9';
+  const Top = '#000000';
 
   // Create a more environment-map friendly gradient
   const gradientHeight = canvas.height;
   const gradient = ctx.createLinearGradient(0, 0, 0, gradientHeight);
-  gradient.addColorStop(1, darkBlue);    // Top
-  gradient.addColorStop(0.5, brownish);  // Middle
-  gradient.addColorStop(0, peach);       // Bottom
+  gradient.addColorStop(1, Top);    // Top
+  gradient.addColorStop(0.5, Middle);  // Middle
+  gradient.addColorStop(0, Bottom);       // Bottom
   
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -365,10 +365,10 @@ function createMainStatsTexture() {
    
     // Create gradient background
     const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    gradient.addColorStop(0, 'rgba(92, 61, 54, 1)');
-    gradient.addColorStop(1, 'rgba(51, 35, 50, 1)');
+    gradient.addColorStop(0, 'rgba(30, 30, 30, 1)');
+    gradient.addColorStop(1, 'rgba(40, 40, 40, 1)');
      
-    const borderColor = 'rgb(7, 12, 33)';
+    const borderColor = 'rgb(30, 30, 30)';
     const borderWidth = 5;
      
     // Draw rounded rectangle with border
@@ -410,7 +410,7 @@ function createMainStatsTexture() {
     const xAdjustment = 6;
     const yAdjustment = canvas.height / 35;
     ctx.fillStyle = 'rgba(255, 255, 255, 1)';
-    ctx.fillText(`Volume: ${totalSent.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})} S`, canvas.width/2 + xAdjustment, canvas.height/4 - yAdjustment);
+    ctx.fillText(`Volume: ${totalSent.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})} SPN`, canvas.width/2 + xAdjustment, canvas.height/4 - yAdjustment);
     ctx.fillText(`Balls/Queue: ${ballCount}/${currentQueueCount}`, canvas.width/2 + xAdjustment, canvas.height / 2 - yAdjustment);
     ctx.fillText(`TPS: ${tps}`, canvas.width/2 + xAdjustment, canvas.height * 3/4 - yAdjustment);
     
@@ -461,10 +461,10 @@ function createSelectedTxTexture() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    gradient.addColorStop(0, 'rgba(61, 42, 52, 1)');
-    gradient.addColorStop(1, 'rgba(45, 31, 44, 1)');
-    
-    const borderColor = 'rgb(7, 12, 33)';
+    gradient.addColorStop(0, 'rgba(30, 30, 30, 1)');
+    gradient.addColorStop(1, 'rgba(40, 40, 40, 1)');
+     
+    const borderColor = 'rgb(30, 30, 30)';
     const borderWidth = 5;
     
     // Draw rounded rectangle with border
@@ -500,7 +500,7 @@ function createSelectedTxTexture() {
     ctx.fillText('Selected', canvas.width/2 + xAdjustment, canvas.height/3);
     
     if (selectedSphere) {
-      const amount = `${selectedSphere.amount.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: selectedSphere.amount > 1 ? 0 : 8})} S`;
+      const amount = `${selectedSphere.amount.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: selectedSphere.amount > 1 ? 0 : 8})} SPN`;
       
       ctx.font = '24px Arial';
       ctx.fillStyle = window.isStatsHovered ? '#66d9ff' : '#4A9EFF';
@@ -736,7 +736,7 @@ function createLogoTexture() {
   const ctx = canvas.getContext('2d');
   
   // Create base color
-  ctx.fillStyle = '#0048b2';
+  ctx.fillStyle = '#646464';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
   // Load and draw SVG
@@ -802,7 +802,7 @@ async function createGround() {
   const logoTexture = await createLogoTexture();
   
   const topMaterial = new THREE.MeshStandardMaterial({
-    color: 0x0048b2,
+    color: 0xffffff,
     metalness: 0.95,
     roughness: 0.05,
     envMapIntensity: 2,
@@ -810,7 +810,7 @@ async function createGround() {
   });
 
   const sideMaterial = new THREE.MeshStandardMaterial({
-    color: 0x0048b2,
+    color: 0xffffff,
     metalness: 0.95,
     roughness: 0.05,
     envMapIntensity: 2
@@ -902,15 +902,15 @@ function createSphere(amount, txHash) {
 
   // Set colors based on amount thresholds
   if (amount === 0) {
-    sphereColor = 0x2a0029; // black
+    sphereColor = 0x32c2c4; // conduit.xyz blue
   } else if (amount < 1) {
-    sphereColor = 0xcc2222; // red
+    sphereColor = 0x84dadb; // tints of 
   } else if (amount <= 1000) {
-    sphereColor = 0xca6749; // orange
+    sphereColor = 0xade7e7; // less blue 
   } else if (amount <= 100000) {
-    sphereColor = 0x1c368b; // blue
+    sphereColor = 0xd7f3f4; // until totally
   } else {
-    sphereColor = 0x378c2b; // green
+    sphereColor = 0xffffff; // white
   }
 
   const geometry = new THREE.SphereGeometry(size, segmentSize, segmentSize);
@@ -1106,8 +1106,8 @@ function processTransaction(txData) {
     return;
   }
   
-  // Add to total Sonic sent
-  sonic_sent += txData.amount;
+  // Add to total SPN sent
+  SPN_sent += txData.amount;
   
   // Add to queue if not full
   if (sphereQueue.length < MAX_QUEUE_SIZE) {
@@ -1120,7 +1120,7 @@ function processTransaction(txData) {
   // Update stats display immediately after queue change
   if (window.updateStatsDisplay) {
     requestAnimationFrame(() => {
-      window.updateStatsDisplay(sonic_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
+      window.updateStatsDisplay(SPN_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
     });
   }
 }
@@ -1155,7 +1155,7 @@ function startSphereCreationLoop() {
         lastSphereCreateTime = currentTime;
         
         if (window.updateStatsDisplay && currentTime - lastSphereCreateTime >= 500) {
-          window.updateStatsDisplay(sonic_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
+          window.updateStatsDisplay(SPN_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
         }
       }
     }
